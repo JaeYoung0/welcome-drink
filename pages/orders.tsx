@@ -56,7 +56,16 @@ const OrderLists = styled.ol`
   }
 `;
 
-export default function Orders({ orders }) {
+interface Props {
+  orders: {
+    _id: number | string;
+    name: string;
+    date: string;
+    device_model?: string;
+  }[];
+}
+
+export default function Orders({ orders }: Props) {
   const [menu, setMenu] = useState("");
   const router = useRouter();
 
@@ -65,16 +74,12 @@ export default function Orders({ orders }) {
     alert("제조 완료되어 주문목록에서 삭제되었습니다.");
     router.reload();
     setMenu("");
-    // const router = useRouter()
   }, [menu]);
 
   return (
     <Layout>
       <Container>
         <h1>Order List</h1>
-        {/* <p>
-        <small>(According to Metacritic)</small>
-      </p> */}
         <OrderLists>
           {orders.length === 0 && <li>주문 목록이 없습니다</li>}
           {orders.map((coffee, idx) => (
@@ -85,7 +90,6 @@ export default function Orders({ orders }) {
                 onClick={async (e) => {
                   const selectedMenu = e.currentTarget.innerText;
                   if (confirm(`${selectedMenu} 제조 완료되었나요?`)) {
-                    // setMenu(selectedMenu);
                     try {
                       axios
                         .delete("/api/db/deleteOne", {
@@ -124,7 +128,6 @@ export async function getServerSideProps() {
     .collection("orders")
     .find({})
     .sort({ date: 1 })
-    // .sort({ metacritic: -1 })
     .limit(20)
     .toArray();
 

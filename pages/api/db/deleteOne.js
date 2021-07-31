@@ -5,7 +5,6 @@ const deleteOne = async (req, res) => {
   const { body } = req;
 
   const { payload, collection } = body;
-  console.log("@@@@@", payload, collection);
 
   try {
     await db.collection(collection).deleteOne(payload);

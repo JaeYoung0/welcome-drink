@@ -14,7 +14,7 @@ export default function Coffees({ coffees }: Coffees) {
   const [editMode, setEditMode] = useState(false);
   const router = useRouter();
   const [addedMenu, setAddedMenu] = useState("");
-  const target = useRef([]);
+  const target = useRef<string[]>([]);
 
   useEffect(() => {
     if (!menu) return;
@@ -49,7 +49,10 @@ export default function Coffees({ coffees }: Coffees) {
               value={coffee.name}
             >
               <h2
-                ref={(el) => (target.current[idx] = el?.innerText)}
+                ref={(el) => {
+                  if (!el) return;
+                  target.current[idx] = el?.innerText;
+                }}
                 onClick={(e) => {
                   const selectedMenu = e.currentTarget.innerText;
                   if (confirm(`${selectedMenu}로 하실래요?`)) {
@@ -112,6 +115,7 @@ export default function Coffees({ coffees }: Coffees) {
             style={{ color: "blue" }}
             onClick={() => {
               const newMenu = prompt("메뉴 이름을 적어주세요.");
+              if (!newMenu) return;
               setAddedMenu(newMenu);
             }}
           >
@@ -134,7 +138,6 @@ export async function getServerSideProps() {
     .collection("coffees")
     .find({})
     .sort({ name: 1 })
-    // .sort({ metacritic: -1 })
     .limit(20)
     .toArray();
 

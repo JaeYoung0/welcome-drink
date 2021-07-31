@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Layout from "src/layouts";
 import FreeBreakfastIcon from "@material-ui/icons/FreeBreakfast";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -25,9 +26,6 @@ const Container = styled.div`
 `;
 
 const MenuWrapper = styled.div`
-  /* width: 100%;
-  height: 100%; */
-  /* background-image: url("/images/decoration.png"); */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,16 +37,12 @@ const MenuWrapper = styled.div`
   img:nth-of-type(1) {
     width: 60%;
     margin-top: 3rem;
-    /* margin-bottom: 1rem; */
-    /* transform: rotate(180deg); */
-    /* transform: translateX(20%); */
   }
 
   img:nth-of-type(2) {
     width: 60%;
     transform: rotate(180deg);
     margin-bottom: 2rem;
-    /* transform: translateX(20%); */
   }
 `;
 
@@ -92,12 +86,20 @@ const BottomIcons = styled.div`
   padding: 3rem;
 `;
 
-export default function Home({ coffees }) {
+interface Props {
+  coffees: {
+    _id: number | string;
+    name: string;
+    // date: string;
+  }[];
+}
+
+export default function Home({ coffees }: Props) {
   const [menu, setMenu] = useState("");
   const [editMode, setEditMode] = useState(false);
   const router = useRouter();
   const [addedMenu, setAddedMenu] = useState("");
-  const target = useRef([]);
+  const target = useRef<string[]>([]);
 
   useEffect(() => {
     if (!menu) return;
@@ -124,11 +126,9 @@ export default function Home({ coffees }) {
       <Container>
         <h1>Welcome Drink</h1>
         <MenuWrapper>
-          <img src='/images/elegant_top.png' />
-          {/* <h2>Choose Menu</h2> */}
-          {/* <img src='/images/decoration.png' /> */}
+          <img src='/images/elegant_top.png' alt='cover' />
           <Menus>
-            {coffees?.map((coffee, idx) => (
+            {coffees.map((coffee, idx) => (
               <>
                 <li
                   style={{ cursor: "pointer", listStyle: "none" }}
@@ -136,7 +136,10 @@ export default function Home({ coffees }) {
                   value={coffee.name}
                 >
                   <span
-                    ref={(el) => (target.current[idx] = el?.innerText)}
+                    ref={(el) => {
+                      if (!el) return;
+                      target.current[idx] = el?.innerText;
+                    }}
                     onClick={(e) => {
                       const selectedMenu = e.currentTarget.innerText;
                       if (confirm(`${selectedMenu}로 하실래요?`)) {
@@ -198,13 +201,14 @@ export default function Home({ coffees }) {
                 style={{ color: "gray", fontSize: "4rem" }}
                 onClick={() => {
                   const newMenu = prompt("메뉴 이름을 적어주세요.");
+                  if (!newMenu) return;
                   setAddedMenu(newMenu);
                 }}
               />
             )}
           </Menus>
 
-          <img src='/images/elegant_top.png' />
+          <img src='/images/elegant_top.png' alt='cover' />
         </MenuWrapper>
         <BottomIcons>
           <FreeBreakfastIcon
@@ -213,10 +217,6 @@ export default function Home({ coffees }) {
           />
           <QueryBuilderIcon onClick={() => router.push("/orders")} />
         </BottomIcons>
-
-        {/* <button onClick={() => setEditMode(!editMode)}>
-          {editMode ? "메뉴수정 완료" : "메뉴 수정하기"}
-        </button> */}
       </Container>
     </Layout>
   );
@@ -229,7 +229,6 @@ export async function getServerSideProps() {
     .collection("coffees")
     .find({})
     .sort({ name: 1 })
-    // .sort({ metacritic: -1 })
     .limit(20)
     .toArray();
 

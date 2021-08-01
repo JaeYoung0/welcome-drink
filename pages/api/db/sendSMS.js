@@ -14,12 +14,12 @@ const sendSMS = async (req, res) => {
   const JY_PHONE_NUMBER = "01090958697";
 
   const makeSignature = () => {
-    var space = " "; // one space
-    var newLine = "\n"; // new line
-    var method = "POST"; // method
-    var url = `/sms/v2/services/${SMS_SERVICE_ID}/messages`;
+    const space = " "; // one space
+    const newLine = "\n"; // new line
+    const method = "POST"; // method
+    const url = `/sms/v2/services/${SMS_SERVICE_ID}/messages`;
 
-    var hmac = CryptoJS.algo.HMAC.create(
+    const hmac = CryptoJS.algo.HMAC.create(
       CryptoJS.algo.SHA256,
       NAVER_SECRET_KEY
     );
@@ -31,7 +31,7 @@ const sendSMS = async (req, res) => {
     hmac.update(newLine);
     hmac.update(NAVER_ACCESS_KEY_ID);
 
-    var hash = hmac.finalize();
+    const hash = hmac.finalize();
 
     return hash.toString(CryptoJS.enc.Base64);
   };
@@ -48,10 +48,6 @@ const sendSMS = async (req, res) => {
         from: JY_PHONE_NUMBER,
         content: "주문안내",
         messages: [
-          // {
-          //   to: CLOCKER_PHONE_NUMBER,
-          //   content: `${payload.device_model}에서 ${payload.name}를 주문했습니다 `,
-          // },
           {
             to: JY_PHONE_NUMBER,
             content: MESSAGE_CONTENT,
@@ -71,7 +67,7 @@ const sendSMS = async (req, res) => {
     res.status(200).json({
       result: "success",
       message: MESSAGE_CONTENT,
-      timestamp: timestamp,
+      timestamp,
     });
   } catch (e) {
     console.error(e);

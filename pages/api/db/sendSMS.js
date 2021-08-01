@@ -37,7 +37,6 @@ const sendSMS = async (req, res) => {
   };
 
   const SIGNATURE = makeSignature();
-  console.log("@@SIGNATURE", SIGNATURE);
 
   try {
     axios.post(
@@ -47,9 +46,13 @@ const sendSMS = async (req, res) => {
         from: JY_PHONE_NUMBER,
         content: "주문안내",
         messages: [
+          // {
+          //   to: CLOCKER_PHONE_NUMBER,
+          //   content: `${payload.device_model}에서 ${payload.name}를 주문했습니다 `,
+          // },
           {
             to: JY_PHONE_NUMBER,
-            content: `${payload.device_model}에서 ${payload.name}를 주문했습니다 `,
+            content: `${payload.device_model}에서 ${payload.name}을(를) 주문했습니다 `,
           },
         ],
       },

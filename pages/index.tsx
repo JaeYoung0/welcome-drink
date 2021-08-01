@@ -125,9 +125,10 @@ export default function Home({ coffees }: Props) {
           collection: "coffees",
         })
         .then(() => {
-          router.reload();
-          setAddedMenu("");
           setIsLoading(false);
+          alert(`${addedMenu}가 메뉴에 추가되었습니다.`);
+          setAddedMenu("");
+          router.reload();
         });
     } catch (error) {
       console.error(error);
@@ -193,9 +194,10 @@ export default function Home({ coffees }: Props) {
                   {editMode && (
                     <DeleteForeverIcon
                       onClick={() => {
+                        const willDeletedMenu = target.current[idx];
                         if (
                           confirm(
-                            `${target.current[idx]} - 메뉴에서 삭제하시겠습니까?`
+                            `${willDeletedMenu} - 메뉴에서 삭제하시겠습니까?`
                           )
                         ) {
                           try {
@@ -205,11 +207,14 @@ export default function Home({ coffees }: Props) {
                                 data: {
                                   collection: "coffees",
                                   payload: {
-                                    name: target.current[idx],
+                                    name: willDeletedMenu,
                                   },
                                 },
                               })
                               .then(() => {
+                                alert(
+                                  `${willDeletedMenu}가 메뉴에서 삭제되었습니다.`
+                                );
                                 setIsLoading(false);
                                 router.reload();
                               });

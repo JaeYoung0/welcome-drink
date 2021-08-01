@@ -10,6 +10,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Welcome Drink</title>
         <link rel='icon' href='/images/logo.png' />
+        <meta property='og:type' content='website' />
+        <meta name='description' content='음료를 선택해주세요. :)' />
+        <meta property='og:image' content='/images/welcome.jpeg' />
       </Head>
       <Global styles={resetStyle} />
       <Component {...pageProps} />

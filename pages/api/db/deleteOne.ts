@@ -1,6 +1,7 @@
-import { connectToDatabase } from "../../../lib/mongodb";
+import { connectToDatabase } from "@lib/mongodb";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const deleteOne = async (req, res) => {
+const deleteOne = async (req: NextApiRequest, res: NextApiResponse) => {
   const { db } = await connectToDatabase();
   const { body } = req;
 

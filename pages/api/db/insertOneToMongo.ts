@@ -1,6 +1,7 @@
-import { connectToDatabase } from "../../../lib/mongodb";
+import { connectToDatabase } from "@lib/mongodb";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const insertOneToMongo = async (req, res) => {
+const insertOneToMongo = async (req: NextApiRequest, res: NextApiResponse) => {
   const { db } = await connectToDatabase();
   const { body } = req;
   const { payload, collection } = body;

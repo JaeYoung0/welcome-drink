@@ -1,12 +1,14 @@
 import axios from "axios";
 import CryptoJS from "crypto-js";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const sendSMS = async (req, res) => {
+const sendSMS = async (req: NextApiRequest, res: NextApiResponse) => {
   const { body } = req;
   const { payload } = body;
 
   const timestamp = Date.now().toString();
-  const SMS_SERVICE_ID = encodeURIComponent(process.env.SMS_SERVICE_ID);
+  // const SMS_SERVICE_ID = encodeURIComponent(process.env.SMS_SERVICE_ID!);
+  const SMS_SERVICE_ID = process.env.SMS_SERVICE_ID!;
   const NAVER_ACCESS_KEY_ID = process.env.NAVER_ACCESS_KEY_ID;
   const NAVER_SECRET_KEY = process.env.NAVER_SECRET_KEY;
 
@@ -21,7 +23,7 @@ const sendSMS = async (req, res) => {
 
     const hmac = CryptoJS.algo.HMAC.create(
       CryptoJS.algo.SHA256,
-      NAVER_SECRET_KEY
+      NAVER_SECRET_KEY!
     );
     hmac.update(method);
     hmac.update(space);
@@ -29,7 +31,7 @@ const sendSMS = async (req, res) => {
     hmac.update(newLine);
     hmac.update(timestamp);
     hmac.update(newLine);
-    hmac.update(NAVER_ACCESS_KEY_ID);
+    hmac.update(NAVER_ACCESS_KEY_ID!);
 
     const hash = hmac.finalize();
 
@@ -52,10 +54,10 @@ const sendSMS = async (req, res) => {
             to: JY_PHONE_NUMBER,
             content: MESSAGE_CONTENT,
           },
-          // {
-          //   to: CLOCKER_PHONE_NUMBER,
-          //   content: MESSAGE_CONTENT,
-          // },
+          {
+            to: CLOCKER_PHONE_NUMBER,
+            content: MESSAGE_CONTENT,
+          },
         ],
       },
       {

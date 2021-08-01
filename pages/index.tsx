@@ -143,6 +143,9 @@ export default function Home({ coffees }: Props) {
                     onClick={(e) => {
                       const selectedMenu = e.currentTarget.innerText;
                       if (confirm(`${selectedMenu}로 하실래요?`)) {
+                        const device_model = parser(window.navigator.userAgent)
+                          .device.model;
+
                         try {
                           axios
                             .post("/api/db/insertOneToMongo", {
@@ -150,12 +153,17 @@ export default function Home({ coffees }: Props) {
                               payload: {
                                 name: selectedMenu,
                                 date: new Date().toLocaleString(),
-                                device_model: parser(window.navigator.userAgent)
-                                  .device.model,
+                                device_model,
                               },
                             })
                             .then((res) => {
                               setMenu(res.data.name);
+                              axios.post("/api/db/sendSMS", {
+                                payload: {
+                                  name: selectedMenu,
+                                  device_model,
+                                },
+                              });
                             });
                         } catch (error) {
                           console.error(error);

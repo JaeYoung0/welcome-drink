@@ -10,6 +10,9 @@ const sendSMS = async (req, res) => {
   const NAVER_ACCESS_KEY_ID = process.env.NAVER_ACCESS_KEY_ID;
   const NAVER_SECRET_KEY = process.env.NAVER_SECRET_KEY;
 
+  const CLOCKER_PHONE_NUMBER = "01092870864";
+  const JY_PHONE_NUMBER = "01090958697";
+
   const makeSignature = () => {
     var space = " "; // one space
     var newLine = "\n"; // new line
@@ -41,11 +44,11 @@ const sendSMS = async (req, res) => {
       `https://sens.apigw.ntruss.com/sms/v2/services/${SMS_SERVICE_ID}/messages`,
       {
         type: "SMS",
-        from: "01090958697",
+        from: JY_PHONE_NUMBER,
         content: "주문안내",
         messages: [
           {
-            to: "01090958697",
+            to: JY_PHONE_NUMBER,
             content: `${payload.device_model}에서 ${payload.name}를 주문했습니다 `,
           },
         ],

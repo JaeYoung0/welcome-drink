@@ -81,7 +81,7 @@ export default function Orders({ orders }: Props) {
       <Container>
         <h1>Order List</h1>
         <OrderLists>
-          {orders.length === 0 && <li>주문 목록이 없습니다</li>}
+          {orders.length === 0 && <h2>주문 내역이 없습니다.</h2>}
           {orders.map((coffee, idx) => (
             <div key={coffee._id}>
               <li

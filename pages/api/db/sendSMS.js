@@ -71,6 +71,7 @@ const sendSMS = async (req, res) => {
     res.status(200).json({
       result: "success",
       message: MESSAGE_CONTENT,
+      timestamp: timestamp,
     });
   } catch (e) {
     console.error(e);

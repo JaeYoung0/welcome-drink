@@ -142,7 +142,7 @@ export default function Home({ coffees }: Props) {
                     }}
                     onClick={(e) => {
                       const selectedMenu = e.currentTarget.innerText;
-                      if (confirm(`${selectedMenu}로 하실래요?`)) {
+                      if (confirm(`"${selectedMenu}"로 하실래요?`)) {
                         const device_model = parser(window.navigator.userAgent)
                           .device.model;
 
@@ -157,13 +157,13 @@ export default function Home({ coffees }: Props) {
                               },
                             })
                             .then((res) => {
-                              setMenu(res.data.name);
                               axios.post("/api/db/sendSMS", {
                                 payload: {
                                   name: selectedMenu,
                                   device_model,
                                 },
                               });
+                              setMenu(res.data.name);
                             });
                         } catch (error) {
                           console.error(error);

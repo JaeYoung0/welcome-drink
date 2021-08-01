@@ -12,6 +12,8 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import parser from "ua-parser-js";
 
+import Loading from "@svgs/Loading";
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -101,8 +103,11 @@ export default function Home({ coffees }: Props) {
   const [addedMenu, setAddedMenu] = useState("");
   const target = useRef<string[]>([]);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     if (!menu) return;
+    setIsLoading(false);
     alert(`${menu} 주문이 완료되었습니다.`);
     router.push("/orders");
     setMenu("");
@@ -125,6 +130,8 @@ export default function Home({ coffees }: Props) {
     <Layout>
       <Container>
         <h1>Welcome Drink</h1>
+        {isLoading && <Loading />}
+
         <MenuWrapper>
           <img src='/images/elegant_top.png' alt='cover' />
           <Menus>
@@ -142,11 +149,13 @@ export default function Home({ coffees }: Props) {
                     }}
                     onClick={(e) => {
                       const selectedMenu = e.currentTarget.innerText;
+
                       if (confirm(`"${selectedMenu}"로 하실래요?`)) {
                         const device_model = parser(window.navigator.userAgent)
                           .device.model;
 
                         try {
+                          setIsLoading(true);
                           axios
                             .post("/api/db/insertOneToMongo", {
                               collection: "orders",
@@ -197,7 +206,7 @@ export default function Home({ coffees }: Props) {
                           }
                         }
                       }}
-                      style={{ color: "red" }}
+                      style={{ color: "#e83e8c" }}
                     />
                   )}
                 </li>
@@ -220,7 +229,7 @@ export default function Home({ coffees }: Props) {
         </MenuWrapper>
         <BottomIcons>
           <FreeBreakfastIcon
-            style={{ color: editMode ? "red" : "black" }}
+            style={{ color: editMode ? "#e83e8c" : "black" }}
             onClick={() => setEditMode(!editMode)}
           />
           <QueryBuilderIcon onClick={() => router.push("/orders")} />

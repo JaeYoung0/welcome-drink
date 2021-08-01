@@ -5,6 +5,7 @@ import { connectToDatabase } from "../lib/mongodb";
 import Layout from "src/layouts";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
+import Loading from "@svgs/Loading";
 
 const Container = styled.div`
   display: flex;
@@ -68,9 +69,11 @@ interface Props {
 export default function Orders({ orders }: Props) {
   const [menu, setMenu] = useState("");
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!menu) return;
+    setIsLoading(false);
     alert("제조 완료되어 주문목록에서 삭제되었습니다.");
     router.reload();
     setMenu("");
@@ -79,6 +82,7 @@ export default function Orders({ orders }: Props) {
   return (
     <Layout>
       <Container>
+        {isLoading && <Loading />}
         <h1>Order List</h1>
         <OrderLists>
           {orders.length === 0 && <h2>주문 내역이 없습니다.</h2>}
@@ -89,7 +93,9 @@ export default function Orders({ orders }: Props) {
                 value={coffee.name}
                 onClick={async (e) => {
                   const selectedMenu = e.currentTarget.innerText;
+
                   if (confirm(`${selectedMenu} 제조 완료되었나요?`)) {
+                    setIsLoading(true);
                     try {
                       axios
                         .delete("/api/db/deleteOne", {
@@ -100,10 +106,14 @@ export default function Orders({ orders }: Props) {
                             },
                           },
                         })
-                        .then((res) => setMenu(res.data.name));
+                        .then((res) => {
+                          setMenu(res.data.name);
+                        });
                     } catch (error) {
                       console.error(error);
                     }
+                  } else {
+                    setIsLoading(false);
                   }
                 }}
               >

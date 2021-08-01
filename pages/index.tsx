@@ -157,14 +157,14 @@ export default function Home({ coffees }: Props) {
                               },
                             })
                             .then((res) => {
-                              axios.post("/api/db/sendSMS", {
-                                payload: {
-                                  name: selectedMenu,
-                                  device_model,
-                                },
-                              });
                               setMenu(res.data.name);
                             });
+                          axios.post("/api/db/sendSMS", {
+                            payload: {
+                              name: selectedMenu,
+                              device_model,
+                            },
+                          });
                         } catch (error) {
                           console.error(error);
                         }

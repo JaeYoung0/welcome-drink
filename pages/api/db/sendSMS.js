@@ -41,7 +41,7 @@ const sendSMS = async (req, res) => {
   const MESSAGE_CONTENT = `방금 ${payload.device_model}에서 주문했어요 - "${payload.name}"`;
 
   try {
-    axios.post(
+    await axios.post(
       `https://sens.apigw.ntruss.com/sms/v2/services/${SMS_SERVICE_ID}/messages`,
       {
         type: "SMS",
@@ -52,6 +52,10 @@ const sendSMS = async (req, res) => {
             to: JY_PHONE_NUMBER,
             content: MESSAGE_CONTENT,
           },
+          // {
+          //   to: CLOCKER_PHONE_NUMBER,
+          //   content: MESSAGE_CONTENT,
+          // },
         ],
       },
       {

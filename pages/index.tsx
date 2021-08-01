@@ -115,15 +115,23 @@ export default function Home({ coffees }: Props) {
 
   useEffect(() => {
     if (!addedMenu) return;
-    axios
-      .post("/api/db/insertOneToMongo", {
-        payload: {
-          name: addedMenu,
-        },
-        collection: "coffees",
-      })
-      .then(() => router.reload());
-    setAddedMenu("");
+    try {
+      setIsLoading(true);
+      axios
+        .post("/api/db/insertOneToMongo", {
+          payload: {
+            name: addedMenu,
+          },
+          collection: "coffees",
+        })
+        .then(() => {
+          router.reload();
+          setAddedMenu("");
+          setIsLoading(false);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   }, [addedMenu]);
 
   return (
@@ -191,6 +199,7 @@ export default function Home({ coffees }: Props) {
                           )
                         ) {
                           try {
+                            setIsLoading(true);
                             axios
                               .delete("api/db/deleteOne", {
                                 data: {
@@ -200,7 +209,10 @@ export default function Home({ coffees }: Props) {
                                   },
                                 },
                               })
-                              .then(() => router.reload());
+                              .then(() => {
+                                setIsLoading(false);
+                                router.reload();
+                              });
                           } catch (error) {
                             console.error(error);
                           }

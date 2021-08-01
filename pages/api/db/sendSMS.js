@@ -38,6 +38,8 @@ const sendSMS = async (req, res) => {
 
   const SIGNATURE = makeSignature();
 
+  const MESSAGE_CONTENT = `방금 ${payload.device_model}에서 주문했어요 - "${payload.name}"`;
+
   try {
     axios.post(
       `https://sens.apigw.ntruss.com/sms/v2/services/${SMS_SERVICE_ID}/messages`,
@@ -52,7 +54,7 @@ const sendSMS = async (req, res) => {
           // },
           {
             to: JY_PHONE_NUMBER,
-            content: `${payload.device_model}에서 ${payload.name}을(를) 주문했습니다 `,
+            content: MESSAGE_CONTENT,
           },
         ],
       },
@@ -68,7 +70,7 @@ const sendSMS = async (req, res) => {
 
     res.status(200).json({
       result: "success",
-      name: `${payload.name} 메시지 전송완료`,
+      message: MESSAGE_CONTENT,
     });
   } catch (e) {
     console.error(e);

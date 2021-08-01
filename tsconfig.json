@@ -9,6 +9,7 @@
       "@components/*": ["src/components/*"],
       "@constants/*": ["src/constants/*"],
       "@layouts/*": ["src/layouts/*"],
+      "@svgs/*": ["src/svgs/*"],
       "@lib/*": ["lib/*"]
     },
     "target": "es5",

@@ -9,10 +9,22 @@ import { useEffect, useRef, useState } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import parser from "ua-parser-js";
 
 import Loading from "@svgs/Loading";
+
+const fadeIn = keyframes`
+ from {
+    transform: translateY(10px);
+    opacity: 0;
+
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+`;
 
 const Container = styled.div`
   display: flex;
@@ -27,11 +39,12 @@ const Container = styled.div`
   }
 
   strong {
-    font-size: 2rem;
-    margin-top: 1.5rem;
+    font-size: 1.25rem;
+    margin-top: 2rem;
     /* color: #e83e8c; */
-    color: #222222;
-    opacity: 0.6;
+    color: #000000;
+    /* opacity: 0.6; */
+    animation: ${fadeIn} 1s ease-in-out;
   }
 `;
 
@@ -75,9 +88,12 @@ const Menus = styled.ul`
     border: 1px dashed gray;
   }
   li {
+    opacity: 0;
     padding: 15px;
     display: flex;
     align-items: center;
+    animation: ${fadeIn} 1s ease-in-out forwards;
+    animation-delay: 1s;
   }
 
   li span {

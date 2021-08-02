@@ -25,6 +25,14 @@ const Container = styled.div`
     text-align: center;
     font-size: 6rem;
   }
+
+  strong {
+    font-size: 2rem;
+    margin-top: 1.5rem;
+    /* color: #e83e8c; */
+    color: #222222;
+    opacity: 0.6;
+  }
 `;
 
 const MenuWrapper = styled.div`
@@ -45,6 +53,12 @@ const MenuWrapper = styled.div`
     width: 60%;
     transform: rotate(180deg);
     margin-bottom: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    img {
+      max-width: 360px;
+    }
   }
 `;
 
@@ -77,6 +91,10 @@ const Menus = styled.ul`
   li svg {
     font-size: 2rem;
     margin-left: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    max-width: 700px;
   }
 `;
 
@@ -139,6 +157,7 @@ export default function Home({ coffees }: Props) {
     <Layout>
       <Container>
         <h1>Welcome Drink</h1>
+        <strong>메뉴를 터치해주세요</strong>
         {isLoading && <Loading />}
 
         <MenuWrapper>

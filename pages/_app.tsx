@@ -2,11 +2,13 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Global } from "@emotion/react";
 import { resetStyle } from "@styles/resetStyle";
-import { connectToDatabase } from "@lib/mongodb";
+
+import { Provider } from "react-redux";
+import { store } from "@store/store";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div>
+    <>
       <Head>
         <title>Welcome Drink</title>
         <link rel='icon' href='/images/clocker_pink_logo.png' />
@@ -15,8 +17,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta property='og:image' content='/images/welcome.jpeg' />
       </Head>
       <Global styles={resetStyle} />
-      <Component {...pageProps} />
-    </div>
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
+    </>
   );
 }
 export default MyApp;

@@ -47,7 +47,7 @@ const sendSMS = async (req: NextApiRequest, res: NextApiResponse) => {
       `https://sens.apigw.ntruss.com/sms/v2/services/${SMS_SERVICE_ID}/messages`,
       {
         type: "SMS",
-        from: JY_PHONE_NUMBER,
+        from: CLOCKER_PHONE_NUMBER,
         content: "주문안내",
         messages: [
           {

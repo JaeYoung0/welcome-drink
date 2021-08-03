@@ -92,6 +92,7 @@ const Menus = styled.ul`
     padding: 15px;
     display: flex;
     align-items: center;
+    justify-content: center;
     animation: ${fadeIn} 1s ease-in-out forwards;
     animation-delay: 1s;
   }

@@ -1,11 +1,26 @@
 import axios from "axios";
-import { useRouter } from "next/dist/client/router";
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, ChangeEvent } from "react";
 import { connectToDatabase } from "../lib/mongodb";
 import Layout from "src/layouts";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import Loading from "@svgs/Loading";
+import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import DoneAllIcon from "@material-ui/icons/DoneAll";
+
+import { useRouter } from "next/router";
+import { useRef } from "react";
+
+const BottomIcons = styled.div`
+  svg {
+    font-size: 3rem;
+    margin: 0 10px;
+  }
+  padding: 3rem;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -24,11 +39,15 @@ const OrderLists = styled.ol`
   width: 90vw;
   border-radius: 25px;
   margin: 2rem 0;
-  padding: 1.5rem;
+  padding: 3rem 1.5rem 1.5rem 1.5rem;
   border: 1px solid black;
 
+  input[type="checkbox"] {
+    display: none;
+  }
+
   div {
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
   }
 
   > svg {
@@ -53,7 +72,7 @@ const OrderLists = styled.ol`
   }
 
   span {
-    padding: 15px;
+    padding: 0px 15px 15px 15px;
   }
 `;
 
@@ -70,6 +89,7 @@ export default function Orders({ orders }: Props) {
   const [menu, setMenu] = useState("");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [checkedItem, setcheckedItem] = useState<any[]>([]);
 
   useEffect(() => {
     if (!menu) return;
@@ -79,53 +99,113 @@ export default function Orders({ orders }: Props) {
     setMenu("");
   }, [menu]);
 
+  useEffect(() => {
+    console.log("@@!!checkedItem", checkedItem);
+  }, [checkedItem]);
+
   return (
     <Layout>
       <Container>
         {isLoading && <Loading />}
         <h1>Order List</h1>
         <OrderLists>
-          {orders.length === 0 && <h2>주문 내역이 없습니다.</h2>}
+          {orders.length === 0 && (
+            <h2
+              style={{
+                textAlign: "center",
+                paddingBottom: "15px",
+                opacity: 0.7,
+              }}
+            >
+              주문 내역이 없습니다.
+            </h2>
+          )}
           {orders.map((coffee, idx) => (
             <div key={coffee._id}>
-              <li
-                style={{ cursor: "pointer" }}
-                value={coffee.name}
-                onClick={async (e) => {
-                  const selectedMenu = e.currentTarget.innerText;
-
-                  if (confirm(`${selectedMenu} 제조 완료되었나요?`)) {
-                    setIsLoading(true);
-                    try {
-                      axios
-                        .delete("/api/db/deleteOne", {
-                          data: {
-                            collection: "orders",
-                            payload: {
-                              name: selectedMenu,
-                            },
-                          },
-                        })
-                        .then((res) => {
-                          setMenu(res.data.name);
-                        });
-                    } catch (error) {
-                      console.error(error);
+              <FormControlLabel
+                value='start'
+                control={
+                  <Checkbox
+                    checked={checkedItem.includes(coffee.name)}
+                    style={{
+                      color: "#e83e8c",
+                      marginRight: "-20px",
+                    }}
+                    name={coffee.name}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      if (checkedItem.includes(e.target.name))
+                        return setcheckedItem(
+                          checkedItem.filter((item) => item !== e.target.name)
+                        );
+                      setcheckedItem([...checkedItem, e.target.name]);
+                    }}
+                  />
+                }
+                label={
+                  <div
+                    style={
+                      {
+                        // display: "flex",
+                        // // alignItems: "center",
+                        // flexDirection: "column",
+                      }
                     }
-                  } else {
-                    setIsLoading(false);
-                  }
-                }}
-              >
-                <h2>{coffee.name}</h2>
-              </li>
-              <span style={{ color: "#222222", opacity: 0.75 }}>
-                {coffee?.date}
-                {coffee?.device_model ? `, ${coffee?.device_model}` : ""}
-              </span>
+                  >
+                    <h2>{coffee.name}</h2>
+                    <span
+                      style={{ color: "#222222", opacity: 0.75, padding: 0 }}
+                    >
+                      {coffee?.date}
+                      {coffee?.device_model ? `, ${coffee?.device_model}` : ""}
+                    </span>
+                  </div>
+                }
+                labelPlacement='end'
+              />
             </div>
           ))}
         </OrderLists>
+        <BottomIcons>
+          <DoneAllIcon
+            onClick={() => {
+              checkedItem.length >= orders.length
+                ? setcheckedItem([])
+                : setcheckedItem(orders.map((item) => item.name));
+            }}
+          />
+          <DeleteSweepIcon
+            onClick={() => {
+              if (checkedItem.length === 0)
+                return alert("삭제할 목록을 선택해주세요.");
+              if (
+                confirm(
+                  `선택하신 주문목록을 삭제하시겠습니까? - ${checkedItem}`
+                )
+              ) {
+                const relatedObj = checkedItem.reduce(
+                  (prev, curr) => [...prev, { name: curr }],
+                  []
+                );
+
+                try {
+                  axios
+                    .delete("api/db/deleteMany", {
+                      data: {
+                        collection: "orders",
+                        payload: { $or: relatedObj },
+                      },
+                    })
+                    .then(() => {
+                      alert("삭제를 완료했습니다.");
+                      router.reload();
+                    });
+                } catch (error) {
+                  console.error(error);
+                }
+              }
+            }}
+          />
+        </BottomIcons>
       </Container>
     </Layout>
   );

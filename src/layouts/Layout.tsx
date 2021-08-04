@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import React from "react";
 import * as S from "./Layout.style";
 

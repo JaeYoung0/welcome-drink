@@ -101,7 +101,7 @@ const Menus = styled.ul`
     font-size: 1.5rem;
     font-weight: bold;
     &:hover {
-      color: #c3817f;
+      /* color: #c3817f; */
     }
   }
 
@@ -151,6 +151,7 @@ export default function Home({ coffees }: Props) {
   useEffect(() => {
     if (!addedMenu) return;
     try {
+      setEditMode(false);
       setIsLoading(true);
       axios
         .post("/api/db/insertOneToMongo", {
@@ -237,6 +238,7 @@ export default function Home({ coffees }: Props) {
                           )
                         ) {
                           try {
+                            setEditMode(false);
                             setIsLoading(true);
                             axios
                               .delete("api/db/deleteOne", {

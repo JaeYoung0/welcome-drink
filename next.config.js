@@ -10,7 +10,6 @@ module.exports = withPlugins([
         skipWaiting: true,
         sw: "/sw.js",
       },
-      reactStrictMode: true,
     }),
   ],
 ]);

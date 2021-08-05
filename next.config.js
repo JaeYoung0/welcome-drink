@@ -7,6 +7,7 @@ const nextConfig = {
 
 module.exports = withPlugins(
   [
+    // WHY...withPWA 때문에 prd 환경에서 build error 발생...
     // [
     //   withPWA({
     //     pwa: {

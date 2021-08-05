@@ -5,7 +5,6 @@ const insertOneToMongo = async (req: NextApiRequest, res: NextApiResponse) => {
   const { db } = await connectToDatabase();
   const { body } = req;
   const { payload, collection } = body;
-  console.log(payload, collection);
 
   try {
     await db.collection(collection).insertOne(payload);

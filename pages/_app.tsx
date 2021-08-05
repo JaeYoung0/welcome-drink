@@ -2,9 +2,9 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Global } from "@emotion/react";
 import { resetStyle } from "@styles/resetStyle";
-
 import { Provider } from "react-redux";
 import { store } from "@store/store";
+import CustomModal from "@components/CustomModal";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -19,6 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Global styles={resetStyle} />
       <Provider store={store}>
         <Component {...pageProps} />
+        <CustomModal />
       </Provider>
     </>
   );

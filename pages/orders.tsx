@@ -13,6 +13,7 @@ import DoneAllIcon from "@material-ui/icons/DoneAll";
 
 import { useRouter } from "next/router";
 import { useRef } from "react";
+import useModal from "@hooks/useModal";
 
 const BottomIcons = styled.div`
   svg {
@@ -91,11 +92,14 @@ export default function Orders({ orders }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [checkedItem, setcheckedItem] = useState<any[]>([]);
 
+  const { openCustomModal } = useModal();
+
   useEffect(() => {
     if (!menu) return;
     setIsLoading(false);
-    alert("제조 완료되어 주문목록에서 삭제되었습니다.");
+    // openCustomModal("삭제를 완료했습니다.");
     router.reload();
+    setcheckedItem([]);
     setMenu("");
   }, [menu]);
 
@@ -142,15 +146,7 @@ export default function Orders({ orders }: Props) {
                   />
                 }
                 label={
-                  <div
-                    style={
-                      {
-                        // display: "flex",
-                        // // alignItems: "center",
-                        // flexDirection: "column",
-                      }
-                    }
-                  >
+                  <div>
                     <h2>{coffee.name}</h2>
                     <span
                       style={{ color: "#222222", opacity: 0.75, padding: 0 }}
@@ -174,31 +170,30 @@ export default function Orders({ orders }: Props) {
             }}
           />
           <DeleteSweepIcon
-            onClick={() => {
+            onClick={async () => {
               if (checkedItem.length === 0)
                 return alert("삭제할 목록을 선택해주세요.");
-              if (
-                confirm(
-                  `선택하신 주문목록을 삭제하시겠습니까? - ${checkedItem}`
-                )
-              ) {
+
+              const isConfirmed = await openCustomModal(
+                `선택하신 주문목록을 삭제하시겠습니까? `
+              );
+              if (isConfirmed) {
                 const relatedObj = checkedItem.reduce(
                   (prev, curr) => [...prev, { name: curr }],
                   []
                 );
 
                 try {
-                  axios
-                    .delete("api/db/deleteMany", {
-                      data: {
-                        collection: "orders",
-                        payload: { $or: relatedObj },
-                      },
-                    })
-                    .then(() => {
-                      alert("삭제를 완료했습니다.");
-                      router.reload();
-                    });
+                  await axios.delete("api/db/deleteMany", {
+                    data: {
+                      collection: "orders",
+                      payload: { $or: relatedObj },
+                    },
+                  });
+
+                  // openCustomModal("삭제를 완료했습니다.");
+                  router.reload();
+                  setcheckedItem([]);
                 } catch (error) {
                   console.error(error);
                 }

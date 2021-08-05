@@ -37,7 +37,7 @@ function CustomModal() {
         >
           {/* <ContactSupportIcon /> */}
           <LocalCafeIcon
-            style={{ fontSize: "2rem", color: "#ff007f", marginRight: "10px" }}
+            style={{ fontSize: "2rem", color: "#e83e8c", marginRight: "10px" }}
           />
           알림
         </CardContent>
@@ -61,7 +61,7 @@ function CustomModal() {
             variant='outlined'
             style={{
               fontSize: "1.2rem",
-              border: "1px solid #ff007f",
+              border: "1px solid #e83e8c",
               margin: "1.2rem",
             }}
             onClick={decline}
@@ -73,7 +73,7 @@ function CustomModal() {
             // color='secondary'
             style={{
               fontSize: "1.2rem",
-              background: "#ff007f",
+              background: "#e83e8c",
               color: "white",
               margin: "1rem",
             }}

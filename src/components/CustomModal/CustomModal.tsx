@@ -7,13 +7,11 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import useModal from "@hooks/useModal";
-import ContactSupportIcon from "@material-ui/icons/ContactSupport";
-import InfoIcon from "@material-ui/icons/Info";
+
 import LocalCafeIcon from "@material-ui/icons/LocalCafe";
 
 function CustomModal() {
   const { isOpened, decline, confirm, title } = useModal();
-  console.log("@@isOpened", isOpened);
 
   return (
     <Modal
@@ -25,7 +23,7 @@ function CustomModal() {
         alignItems: "center",
       }}
     >
-      <Card style={{ width: "320px", borderRadius: "10px" }}>
+      <Card style={{ width: "32rem", borderRadius: "10px" }}>
         <CardContent
           style={{
             display: "flex",

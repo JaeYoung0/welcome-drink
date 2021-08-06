@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import useModal from "@hooks/useModal";
 
 import LocalCafeIcon from "@material-ui/icons/LocalCafe";
-
+import NotificationsIcon from "@material-ui/icons/Notifications";
 function CustomModal() {
   const { isOpened, decline, confirm, title } = useModal();
 
@@ -36,7 +36,7 @@ function CustomModal() {
           }}
         >
           {/* <ContactSupportIcon /> */}
-          <LocalCafeIcon
+          <NotificationsIcon
             style={{ fontSize: "2rem", color: "#e83e8c", marginRight: "10px" }}
           />
           알림

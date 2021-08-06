@@ -112,7 +112,7 @@ export default function Orders({ orders }: Props) {
       <Container>
         {isLoading && <Loading />}
         <h1>Order List</h1>
-        <OrderLists>
+        <OrderLists style={{ maxWidth: "700px" }}>
           {orders.length === 0 && (
             <h2
               style={{
